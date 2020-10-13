@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+    <title>新闻系统管理后台</title>
+    <link href="../../layui/css/layui.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">新闻系统管理后台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="../public/news.html">文章首页</a></li>
+            <!-- <li class="layui-nav-item"><a href="">商品管理</a></li> -->
+            <!-- <li class="layui-nav-item"><a href="">用户</a></li> -->
+            <!-- <li class="layui-nav-item">
+              <a href="javascript:;">其它系统</a>
+              <dl class="layui-nav-child">
+                <dd><a href="">邮件管理</a></dd>
+                <dd><a href="">消息管理</a></dd>
+                <dd><a href="">授权管理</a></dd>
+              </dl>
+            </li> -->
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:">
+                    <img class="layui-nav-img" src="http://t.cn/RCzsdCq">
+                    贤心
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">修改密码</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="http://localhost:8888/bysj01/logout.do">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="layui-this" href="">首页</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:op('');">个人信息</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:op('../user/user_show.html');" id="user_show">基本资料</a></dd>
+                        <dd><a href="javascript:op('../user/password.html');">修改密码</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:">用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:op('user_list.html');">用户管理</a></dd>
+                        <dd><a href="javascript:op('role_list.html');">角色信息</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:">文章管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:op('../admin/news_list.html');">文章列表</a></dd>
+                        <dd><a href="javascript:op('../admin/news_review.html');">文章审核</a></dd>
+                        <dd><a href="javascript:op('type_list.html');">文章类型</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:">我的文章</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:op('../newsUser/news_add.html');">添加文章</a></dd>
+                        <dd><a href="javascript:op('../newsUser/myNews_list.html');">已通过文章</a></dd>
+                        <dd><a href="javascript:op('../newsUser/not_pass.html');">未通过文章</a></dd>
+                        <dd><a href="javascript:op('../newsUser/reviewing.html');">待审核文章</a></dd>
+                        <dd><a href="javascript:op('../newsUser/news_draft.html');">草稿箱</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:">公告/活动</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:op('../admin/notice_list.html');">通知列表</a></dd>
+                        <dd><a href="javascript:op('../admin/activity_list.html');">活动列表</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div height="98%" name="frameA" width="98%"></div>
+        <iframe height="98%" name='frameA' width="98%"></iframe>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+</script>
+<script>
+    function op(url) {
+        window.open(url, "frameA");
+    }
+</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script src="js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script> -->
+<!-- <script src="new_file.js" type="text/javascript" charset="utf-8"></script> -->
+</body>
+</html>

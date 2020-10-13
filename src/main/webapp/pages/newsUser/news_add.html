@@ -1,0 +1,183 @@
+<html>
+<head>
+    <title>Title</title>
+    <link href="../../layui/css/layui.css" rel="stylesheet">
+</head>
+<body>
+<form action="" class="layui-form" method="post" style="margin: 20px auto;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章标题</label>
+        <div class="layui-input-block">
+
+
+            <input name="userId" type="hidden" value="1">
+
+
+            <input autocomplete="off" class="layui-input" lay-verify="required" name="title" placeholder="请输入文章标题"
+                   style="width: 80%" type="text">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章类型</label>
+        <div class="layui-input-block">
+            <select id="type" lay-verify="required" name="typeId">
+            </select>
+        </div>
+    </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>文章封面</legend>
+    </fieldset>
+
+    <div class="layui-upload">
+        <button class="layui-btn" id="test1" type="button">上传图片</button>
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" id="demo1" style="width: 100px">
+            <p id="demoText"></p>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">文章简介</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea" id="introduction" lay-verify="introduction" name="introduction"
+                      placeholder="请输入内容"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">文章内容</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea" id="content" lay-verify="content" name="content"
+                      placeholder="请输入内容"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-filter="formDemo" lay-submit>立即提交</button>
+            <button class="layui-btn" lay-filter="formSave" lay-submit>保存</button>
+        </div>
+    </div>
+</form>
+<script src="../../layui/layui.all.js"></script>
+<script>
+    layui.use('upload', function () {
+        var $ = layui.jquery
+            , upload = layui.upload;
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            , url: '' //改成您自己的上传接口
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #ff5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+<script>
+    var form = layui.form;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var layedit = layui.layedit;
+    $.ajax({
+        url: 'http://localhost:8888/bysj01/type/selectByAll.do',
+        dataType: 'json',
+        type: 'post',
+        success: function (data) {
+            $.each(data, function (index, item) {
+                $('#type').append(new Option(item.typeName, item.id));
+            });
+            //重新渲染
+            form.render("select");
+        }
+    });
+    var index = layedit.build('content'); //建立编辑器
+    var introduction = layedit.build('introduction', {
+        height: 100,
+        tool: [
+            'strong' //加粗
+            , 'italic' //斜体
+            , 'underline' //下划线
+            , 'del' //删除线
+
+            , '|' //分割线
+
+            , 'left' //左对齐
+            , 'center' //居中对齐
+            , 'right' //右对齐
+            , 'face' //表情
+        ]
+    });
+    form.verify({
+        content: function () {
+            layedit.sync(index);
+        },
+        introduction: function () {
+            layedit.sync(introduction);
+        }
+    });
+    //监听提交
+    form.on('submit(formDemo)', function (data) {
+        $.ajax({
+            url: "http://localhost:8888/bysj01/news/insertStatus.do",// 提交 状态设置为待审核
+            data: {
+                title: data.field.title,
+                typeId: data.field.typeId,
+                introduction: data.field.introduction,
+                content: data.field.content,
+                status: 1
+            },
+            dataType: "json",
+            type: "post",
+            success: function (d) {
+                if (d == 1) {
+                    layer.msg("添加成功");
+                } else if (d == 2) {
+                    layer.msg("添加失败，请重试");
+                }
+            }
+        })
+        return false;
+    });
+    // 监听保存
+    form.on('submit(formSave)', function (data) {
+        $.ajax({
+            url: "http://localhost:8888/bysj01/news/insertStatus.do",// 提交 状态设置为待审核
+            data: {
+                title: data.field.title,
+                typeId: data.field.typeId,
+                introduction: data.field.introduction,
+                content: data.field.content,
+                status: 0
+            },
+            dataType: "json",
+            type: "post",
+            success: function (d) {
+                if (d == 1) {
+                    layer.msg("添加成功");
+                } else {
+                    layer.msg("添加失败，请重试");
+                }
+            }
+        })
+        return false;
+    });
+</script>
+</body>
+</html>

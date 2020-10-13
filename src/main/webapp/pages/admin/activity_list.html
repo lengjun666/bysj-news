@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文章列表</title>
+    <link href="../../layui/css/layui.css" media='all' rel="stylesheet">
+    <script src="../../layui/layui.all.js" type="text/javascript"></script>
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px; padding: 5px">
+    <legend>信息列表</legend>
+    <table id="demo" lay-filter="test"></table>
+</fieldset>
+
+<script id="toolDemo" type="text/html">
+    <a class="layui-btn-xs layui-btn" lay-event="show">详情</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script id="toolbarDemo" type="text/html">
+    <div class="layui-input-inline" style="width: 200px;">
+        <input type="text" name="name" placeholder="请输入标题" class="layui-input" autocomplete="off"/>
+    </div>
+    <button class="layui-btn layui-btn-sm" lay-event="sel">查询</button>
+    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+</script>
+<script>
+    var table = layui.table;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    table.render({
+        elem: '#demo',
+        url: 'http://localhost:8888/bysj01/activity/selectByName.do',// 从后台获取数据
+        toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+        height: 'full-90',
+        page: true, //开启分页
+        cols: [
+            [ //表头
+                {
+                    field: 'id',
+                    title: 'ID',
+                    align: 'center',
+                    width: '5%',
+                    sort: true
+                }, {
+                field: 'title',
+                title: '活动标题',
+                align: 'center',
+                width: '15%'
+            }, {
+                field: 'activity',
+                title: '活动内容',
+                align: 'center',
+                width: 480
+            }, {
+                field: 'addTimeStr',
+                title: '开始时间',
+                align: 'center',
+                width: '13%',
+                sort: true
+            }, {
+                field: 'endTimeStr',
+                title: '结束时间',
+                align: 'center',
+                width: '13%',
+                sort: true
+            }, {
+                field: 'status', title: '状态', width: 100, align: 'center', sort: true, templet: function (res) {
+                    let activityid = res.id;
+                    if (res.status == 0) {
+                        return "   <input type='checkbox' activityid = '" + activityid + "'  lay-filter='status' lay-skin='switch' lay-text='开启|关闭'>"
+                    } else if (res.status == 1) {
+                        return "   <input type='checkbox' activityid = '" + activityid + "' lay-filter='status' lay-skin='switch' lay-text='开启|关闭' checked>"
+                    }
+                }
+            },
+                {
+                    title: '操作',
+                    toolbar: '#toolDemo',
+                    width: 120,
+                    align: 'center'
+                }
+            ]
+        ]
+    });
+    table.on('toolbar(test)', function (obj) {
+        switch (obj.event) {
+            case 'sel':
+                table.reload('demo', {
+                    where: {title: $("input[name='name']").val()}//设定异步数据接口的额外参数
+                    , page: {curr: 1} //重新从第 1 页开始
+                    , method: "post"
+                });
+                layer.msg('刷新查询~');
+                break;
+            case 'add':
+                layer.open({
+                    type: 2,
+                    area: ['800px', '600px'],
+                    maxmin: true,
+                    end: refresh,
+                    content: 'activity_add.html'
+                });
+                break;
+        }
+    });
+
+    function refresh() {
+        $("button[lay-event='sel']").click();//触发了鼠标点击的事件
+    }
+
+    table.on('tool(test)', function (obj) {
+        var event = obj.event;
+        var data = obj.data;
+        var code = data.id;
+        switch (event) {
+            case "del":
+                layer.confirm("确定是否删除", function (index) {
+                    $.ajax({
+                        url: "http://localhost:8888/bysj01/activity/delete.do",
+                        data: "id=" + code,
+                        dataType: "json",
+                        type: "post",
+                        success: function (d) {
+                            if (d == 1) {
+                                layer.msg("删除成功", {time: 2000, shade: 0.4}, function () {
+                                    refresh();
+                                });
+                            } else {
+                                layer.msg("删除失败，请重试");
+                            }
+                        }
+                    })
+                    layer.close(index);
+                });
+                break;
+            case "show":
+                layer.open({
+                    type: 2,
+                    area: ['600px', '450px'],
+                    maxmin: true,
+                    end: refresh,
+                    content: 'http://localhost:8888/bysj01/pages/public/activity_show.html',
+                    success: function (layero, index) {
+                        var iframe = window['layui-layer-iframe' + index];
+                        iframe.child(code);
+                    }
+                });
+                break;
+        }
+    });
+
+    layui.form.on('switch(status)', function (data) {
+        var id = data.elem.attributes['activityid'].nodeValue;
+        if (data.elem.checked) {
+            var status = 1;
+        } else {
+            var status = 0;
+        }
+        $.ajax({
+            url: "http://localhost:8888/bysj01/activity/updateStatus.do",
+            data: {"id": id, "status": status},
+            dataType: "json",
+            type: "post",
+            success: function (d) {
+                if (d == 1) {
+                    layer.msg("修改成功", {time: 1000, shade: 0.4}, function () {
+                        refresh();
+                    });
+                } else {
+                    layer.msg("修改失败", function () {
+                        refresh();
+                    });
+                }
+            }
+        })
+    });
+</script>
+
+
+</body>
+</html>

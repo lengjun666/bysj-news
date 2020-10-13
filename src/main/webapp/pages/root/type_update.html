@@ -1,0 +1,62 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../../layui/css/layui.css" rel="stylesheet">
+</head>
+<body>
+<form action="" class="layui-form" lay-filter="formA" method="post" style="margin: 20px auto;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型名称</label>
+        <div class="layui-input-block">
+            <input autocomplete="off" class="layui-input" lay-verify="required" name="typeName" placeholder="请输入类型名称"
+                   required style="width: 80%" type="text">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-filter="formDemo" lay-submit>立即提交</button>
+            <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+        </div>
+    </div>
+</form>
+<script src="../../layui/layui.all.js"></script>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    var $ = layui.jquery;
+    var form = layui.form;
+    var layer = layui.layer;
+
+    function child(obj) {
+        $.ajax({
+            url: "http://localhost:8888/bysj01/type/selectById.do",
+            data: "id=" + obj,
+            dataType: "json",
+            type: "post",
+            success: function (d) {
+                form.val("formA", {
+                    typeName: d.typeName
+                });
+            }
+        });
+        form.on('submit(formDemo)', function (data) {
+            $.ajax({
+                url: "http://localhost:8888/bysj01/type/update.do",
+                data: {id: obj, typeName: data.field.typeName},
+                dataType: "json",
+                type: "post",
+                success: function (d) {
+                    if (d == 1) {
+                        layer.msg("更新成功");
+                    } else {
+                        layer.msg("更新失败，请重试");
+                    }
+                }
+            });
+            return false;
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文章列表</title>
+    <link href="../../layui/css/layui.css" media='all' rel="stylesheet">
+    <script src="../../layui/layui.all.js" type="text/javascript"></script>
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px; padding: 5px">
+    <legend>信息列表</legend>
+    <table id="demo" lay-filter="test"></table>
+</fieldset>
+
+<script type="text/javascript">
+    var table = layui.table;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    table.render({
+        elem: '#demo'
+        , url: 'http://localhost:8888/bysj01/role/selectByName.do'
+        , height: 'full-90'
+        , page: true //开启分页
+        , cols: [[ //表头
+            {field: 'id', title: 'ID', width: 100, align: 'center', sort: true}
+            , {field: 'roleName', title: '角色名', width: 200, sort: true, align: 'center'}
+            , {field: 'roleDesc', title: '角色描述', align: 'center'}
+        ]]
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文章列表</title>
+    <link href="../../layui/css/layui.css" media='all' rel="stylesheet">
+    <script src="../../layui/layui.all.js" type="text/javascript"></script>
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px; padding: 5px">
+    <legend>信息列表</legend>
+    <table id="demo" lay-filter="test"></table>
+</fieldset>
+
+<script id="toolDemo" type="text/html">
+    <a class="layui-btn layui-btn-xs" lay-event="update">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="commit">提交</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script id="toolbarDemo" type="text/html">
+    <div class="layui-input-inline" style="width: 200px;">
+        <input type="text" name="name" placeholder="请输入名称" class="layui-input" autocomplete="off"/>
+    </div>
+    <button class="layui-btn layui-btn-sm" lay-event="sel">查询</button>
+</script>
+<script>
+    var table = layui.table;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    table.render({
+        elem: '#demo',
+        url: 'http://localhost:8888/bysj01/news/selectByTitleAndUserId.do', // 从后台获取数据 状态为未提交
+        method: "post",
+        where: {userId: 1, status: 0},
+        toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+        height: 'full-90',
+        page: true, //开启分页
+        cols: [
+            [ //表头
+                {
+                    field: 'id',
+                    title: 'ID',
+                    align: 'center',
+                    width: 100,
+                    sort: true
+                }, {
+                field: 'title',
+                title: '标题',
+                align: 'center'
+            }, {
+                field: 'typeName',
+                title: '类型',
+                align: 'center',
+                sort: true
+            }, {
+                field: 'content',
+                title: '内容',
+                align: 'center',
+                width: 500
+            }, {
+                field: 'releaseTimeStr',
+                title: '上次修改时间',
+                align: 'center',
+                width: 200,
+                sort: true
+            }, {
+                title: '操作',
+                toolbar: '#toolDemo',
+                width: 200,
+                align: 'center'
+            }
+            ]
+        ]
+    });
+    table.on('toolbar(test)', function (obj) {
+        switch (obj.event) {
+            case 'sel':
+                table.reload({
+                    where: {
+                        title: $("input[name='name']").val(),
+                        userId: 1,
+                        status: 0
+                    }, method: "post"
+                    , page: {
+                        curr: 1
+                    } //重新从第 1 页开始
+                });
+                layer.msg('刷新查询~');
+                break;
+        }
+    });
+
+    function refresh() {
+        $("button[lay-event='sel']").click(); //触发了鼠标点击的事件
+    }
+
+    table.on('tool(test)', function (obj) {
+        var event = obj.event;
+        var data = obj.data;
+        var id = data.id;
+        switch (event) {
+            case "del":
+                layer.confirm("确定是否删除", function (index) {
+                    $.ajax({
+                        url: "http://localhost:8888/bysj01/news/delete.do",
+                        data: "id=" + id,
+                        dataType: "json",
+                        type: "post",
+                        success: function (d) {
+                            if (d == 1) {
+                                layer.msg("删除成功", {time: 2000, shade: 0.4}, function () {
+                                    refresh();
+                                });
+                            } else {
+                                layer.msg("删除失败，请重试");
+                            }
+                        }
+                    })
+                    layer.close(index);
+                });
+                break;
+
+            // 更新
+            case "update":
+                var test = layer.open({
+                    type: 2,
+                    area: ['600px', '450px'],
+                    maxmin: true,
+                    end: refresh,
+                    content: 'news_update.html',
+                    success: function (layero, index) {
+                        var iframe = window['layui-layer-iframe' + index];
+                        iframe.child(id);
+                    }
+                });
+                layer.full(test);
+                break;
+            case "commit":
+                layer.confirm("确定是否提交", function (index) {
+                    $.ajax({
+                        url: "http://localhost:8888/bysj01/news/updateStatusById.do",
+                        data: {
+                            "id": id,
+                            "status": 1
+                        }, // 文章id 状态设置为待审核
+                        dataType: "json",
+                        type: "post",
+                        success: function (d) {
+                            console.log(d);
+                            if (d == 1) {
+                                layer.msg("提交成功", {time: 2000, shade: 0.4}, function () {
+                                    refresh();
+                                });
+                            } else {
+                                layer.msg("网络错误，请重试");
+                            }
+                        }
+                    })
+                    layer.close(index);
+                });
+                break;
+        }
+    });
+</script>
+</body>
+</html>
