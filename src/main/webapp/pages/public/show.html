@@ -38,15 +38,10 @@
 		<header class="blog-header py-3">
 			<div class="row flex-nowrap justify-content-between align-items-center">
 				<div class="col-4 pt-1">
-					<a class="text-muted" href="#">Subscribe</a>
-				</div>
-				<div class="col-4 text-center">
-					<a class="blog-header-logo text-dark" href="#">Large</a>
-				</div>
-				<div class="col-4 d-flex justify-content-end align-items-center">
 					<form class="form-inline my-2 my-lg-0">
-						<input aria-label="Search" class="form-control mr-sm-2" placeholder="Search" type="text">
-						<a aria-label="Search" class="text-muted" href="#">
+						<input aria-label="Search" class="form-control mr-sm-2" id="search" placeholder="Search"
+							   type="text">
+						<a aria-label="Search" class="text-muted" v-on:click="selectByTitle()">
 							<svg class="mx-3" fill="none" focusable="false" height="20" role="img" stroke="currentColor"
 								 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
 								 width="20" xmlns="http://www.w3.org/2000/svg">
@@ -56,7 +51,11 @@
 							</svg>
 						</a>
 					</form>
-
+				</div>
+				<div class="col-4 text-center">
+					<a class="blog-header-logo text-dark" href="#" style="font-weight: 600">Leng新闻网</a>
+				</div>
+				<div class="col-4 d-flex justify-content-end align-items-center">
 					<a class="btn btn-sm btn-outline-secondary" href="login.html">登录</a>
 				</div>
 			</div>
@@ -64,14 +63,16 @@
 
 		<div class="nav-scroller py-1 mb-2">
 			<nav class="nav d-flex justify-content-between">
-				<a class="p-2 text-muted" href="#" v-for="(item) in type" v-html="item.typeName"></a>
+				<a class="p-2 text-muted" href="#" v-on:click="click()">热点</a>
+				<a class="p-2 text-muted" href="#" v-for="(item) in type" v-html="item.typeName"
+				   v-on:click="updateNews(item.id)"></a>
 			</nav>
 		</div>
 	</div>
 
 	<main class="container" role="main">
 		<div class="row">
-			<div class="col-md-10 blog-main">
+			<div class="col-md-9 blog-main">
 				<div class="row mb-2">
 					<div class="card mb-3 w-100">
 						<img alt="..." class="card-img-top" src="">
@@ -89,7 +90,6 @@
 							<ul class="list-group list-group-flush">
 								<li class="list-group-item" v-for="item in comment" v-html="item.comment"></li>
 								<li class="list-group-item" v-show="show">暂时没有评论，抢个沙发</li>
-								<!--							        <li class="list-group-item">Vestibulum at eros</li>-->
 							</ul>
 						</div>
 					</div>
@@ -115,7 +115,7 @@
 			</div>
 			<!-- /.blog-main -->
 
-			<aside class="col-md-2 blog-sidebar">
+			<aside class="col-md-3 blog-sidebar">
 				<div class="p-4 mb-3 bg-light rounded">
 					<h4 class="font-italic">公告</h4>
 					<strong class="d-inline-block mb-2 text-success" v-html="'发布时间：'+notice.addTimeStr"></strong>
@@ -124,7 +124,7 @@
 				<div class="p-4">
 					<h4 class="font-italic">活动</h4>
 					<ol class="list-unstyled mb-0">
-						<li v-for="item in activity"><a v-bind:href="'javascript:openlay('+item.id+');'"
+						<li v-for="item in activity"><a href="#" v-on:click="activity_show(item.id)"
 														v-html="item.title"></a></li>
 					</ol>
 				</div>
@@ -157,21 +157,7 @@
 		return null;   //注意此处参数是中文，解码使用的方法是unescape ，那么在传值的时候如果是中文，需要使用escape('曲浩')方法来编码。
 	}
 
-	function openlay(index) {
-		var layer = layui.layer;
-		layer.open({
-			type: 2,
-			area: ['600px', '450px'],
-			maxmin: true,
-			content: 'http://localhost:8888/bysj01/pages/public/activity_show.html',
-			success: function (layero, index) {
-				var iframe = window['layui-layer-iframe' + index];
-				iframe.child(index);
-			}
-		});
-	}
-
-	var vm = new Vue({
+	let vm = new Vue({
 		el: '#app',
 		data: {
 			news: {},
@@ -182,8 +168,8 @@
 			show: false
 		},
 		mounted: function () {
-			var id = get("id");
-			var that = this;
+			let id = get("id");
+			let that = this;
 			$.ajax({
 				url: 'http://localhost:8888/bysj01/news/selectById.do',
 				type: "post",
@@ -207,7 +193,7 @@
 				that.type = res.data;
 				//    以此类推
 			}).fail(function () {
-				console.log("请求失败")
+				console.log("请求失败");
 			});
 			// 获取公告
 			$.ajax({
@@ -219,7 +205,7 @@
 				that.notice = res;
 				//    以此类推
 			}).fail(function () {
-				console.log("请求失败")
+				console.log("请求失败");
 			});
 
 			// 获取活动
@@ -233,7 +219,7 @@
 				that.activity = res;
 				//    以此类推
 			}).fail(function () {
-				console.log("请求失败")
+				console.log("请求失败");
 			});
 			// 获取评论
 			$.ajax({
@@ -253,11 +239,76 @@
 			}).fail(function () {
 				console.log("请求失败");
 			});
+		},
+		methods: {
+			updateNews: function (id) {
+				$.ajax({
+					url: 'http://localhost:8888/bysj01/news/selectByTypeId.do',
+					type: "post",
+					data: {typeId: id},
+					dataType: "json",
+					success: function (d) {
+						console.log(d);
+						vm.news = d;
+					}
+				});
+			},
+			click: function () {
+				$.ajax({
+					url: 'http://localhost:8888/bysj01/news/selectByClick.do',
+					type: "post",
+					dataType: "json",
+					success: function (d) {
+						vm.news = d;
+					}
+				});
+			},
+			newsClick: function (id) {
+				console.log(id);
+				$.ajax({
+					url: 'http://localhost:8888/bysj01/news/updateClick.do',
+					type: "post",
+					dataType: "json",
+					data: {id: id},
+					success: function (d) {
+						console.log(d);
+					}
+				});
+			},
+			selectByTitle: function () {
+				let title = $("#search").val();
+				$.ajax({
+					url: 'http://localhost:8888/bysj01/news/selectByTitleAndStatus.do',
+					type: "post",
+					data: {page: 1, limit: 10, title: title, status: 3},
+					dataType: "json",
+					//    配置参数
+				}).done(function (res) {
+					console.log(res);
+					vm.news = res.data;
+					//    以此类推
+				}).fail(function () {
+					console.log("请求失败");
+				});
+			},
+			activity_show: function (id) {
+				let layer = layui.layer;
+				layer.open({
+					type: 2,
+					area: ['600px', '450px'],
+					maxmin: true,
+					content: 'http://localhost:8888/bysj01/pages/public/activity_show.html',
+					success: function (layero, index) {
+						let iframe = window['layui-layer-iframe' + index];
+						iframe.child(id);
+					}
+				});
+			}
 		}
 	});
 
-	var form = layui.form;
-	var layer = layui.layer;
+	let form = layui.form;
+	let layer = layui.layer;
 	form.on('submit(formDemo)', function (data) {
 		console.log(data);
 		$.ajax({
@@ -278,7 +329,7 @@
 					layer.msg("添加失败，请重试");
 				}
 			}
-		})
+		});
 		return false;
 	});
 </script>

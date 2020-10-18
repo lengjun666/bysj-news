@@ -24,10 +24,10 @@
     -->
     <security:http auto-config="true" use-expressions="false">
         <!-- 配置具体的拦截的规则 pattern="请求路径的规则" access="访问系统的人，必须有ROLE_USER的角色" -->
-        <!--        <security:intercept-url pattern="/pages/root/**" access="ROLE_ROOT"/>-->
-        <!--        <security:intercept-url pattern="/pages/admin/**" access="ROLE_ADMIN"/>-->
-        <!--        <security:intercept-url pattern="/pages/newsUser/**" access="ROLE_NEWSUSER"/>-->
-        <!--        <security:intercept-url pattern="/pages/user/**" access="ROLE_USER"/>-->
+        <security:intercept-url pattern="/pages/root/**" access="ROLE_ROOT"/>
+        <security:intercept-url pattern="/pages/admin/**" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/pages/newsUser/**" access="ROLE_NEWSUSER"/>
+        <security:intercept-url pattern="/pages/user/**" access="ROLE_USER"/>
 
         <!-- 定义跳转的具体的页面 -->
         <security:form-login
