@@ -44,7 +44,7 @@ public interface INewsDao {
     News selectById(News news);
 
     // 根据id 更新文章状态
-    @Update("update news set status = #{status} where id = #{id}")
+    @Update("update news set status = #{status},releasetime=#{releaseTime} where id = #{id}")
     int updateStatusById(News news);
 
     // 根据用户id 查询文章
@@ -84,11 +84,11 @@ public interface INewsDao {
     List<News> selectByTitleAndUserId(News news);
 
     // 添加文章 设置状态
-    @Insert("insert into news (title,typeid,introduction,content,userid,status) values (#{title},#{typeId},#{introduction},#{content},#{userId},#{status})")
+    @Insert("insert into news (title,typeid,introduction,content,releasetime,userid,status) values (#{title},#{typeId},#{introduction},#{content},#{releaseTime},#{userId},#{status})")
     int insertStatus(News news);
 
     // 根据文章id 更新文章
-    @Update("update news set title = #{title}, typeid = #{typeId}, introduction = #{introduction}, content = #{content}, status = #{status} where id = #{id}")
+    @Update("update news set title = #{title}, typeid = #{typeId}, introduction = #{introduction}, content = #{content},releasetime=#{releaseTime}, status = #{status} where id = #{id}")
     int update(News news);
 
     // 根据id 删除文章
@@ -132,6 +132,7 @@ public interface INewsDao {
     })
     List<News> selectByClick();
 
+    // 更新点击量
     @Update("update news set click = click + 1 where id = #{id}")
     int updateClick(Integer id);
 }

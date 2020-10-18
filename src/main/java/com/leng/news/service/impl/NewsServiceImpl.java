@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -43,6 +44,7 @@ public class NewsServiceImpl implements INewsService {
 
     // 根据id 更新文章状态
     public int updateStatusById(News news) {
+        news.setReleaseTime(new Date());
         return newsDao.updateStatusById(news);
     }
 
@@ -82,11 +84,13 @@ public class NewsServiceImpl implements INewsService {
 
     // 添加文章 设置状态
     public int insertStatus(News news) {
+        news.setReleaseTime(new Date());
         return newsDao.insertStatus(news);
     }
 
     // 根据文章id 更新文章 设置状态
     public int update(News news) {
+        news.setReleaseTime(new Date());
         return newsDao.update(news);
     }
 
