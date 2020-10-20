@@ -7,6 +7,7 @@ import com.leng.news.domain.Role;
 import com.leng.news.domain.UserInfo;
 import com.leng.news.service.IUserService;
 import com.leng.news.utils.DateUtils;
+import com.leng.news.utils.UserInfoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -38,18 +39,14 @@ public class UserServiceImpl implements IUserService {
             e.printStackTrace();
         }
         //处理自己的User对象封装成UserDetails
-//        User user = new User(userInfo.getUsername(),"{noop}"+userInfo.getPassword(),getAuthority(userInfo.getRoles()));
         User user = new User(userInfo.getUsername(), userInfo.getPassword(), userInfo.getStatus() == 0, true, true, true, getAuthority(userInfo.getRole()));
         return user;
     }
 
     //作用就是返回一个List集合，集合中装入的是角色描述
     public List<SimpleGrantedAuthority> getAuthority(Role role) {
-
         List<SimpleGrantedAuthority> list = new ArrayList<SimpleGrantedAuthority>();
-//        for (Role role:roles){
         list.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
-//        }
         return list;
     }
 
@@ -92,6 +89,7 @@ public class UserServiceImpl implements IUserService {
 
     // 根据id 更新用户密码
     public int updatePassword(UserInfo userInfo) {
+        userInfo.setId(selectId());
         // 密码加密
         userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
         return userDao.updatePassword(userInfo);
@@ -99,6 +97,7 @@ public class UserServiceImpl implements IUserService {
 
     // 根据id查询密码 验证密码是否正确
     public int selectPasswordById(UserInfo userInfo) {
+        userInfo.setId(selectId());
         UserInfo userInfoTemp = userDao.selectPasswordById(userInfo);
         if (bCryptPasswordEncoder.matches(userInfo.getPassword(), userInfoTemp.getPassword())) {
             return 2;
@@ -113,17 +112,33 @@ public class UserServiceImpl implements IUserService {
     }
 
     // 根据id 查询用户信息
-    public UserInfo selectById(UserInfo userInfo) {
-        return userDao.selectById(userInfo);
+    public UserInfo selectById() {
+        UserInfo userInfo = userDao.selectById(selectId());
+        return userInfo;
     }
 
     // 根据id 更新用户信息
     public int update(UserInfo userInfo) {
+        userInfo.setId(selectId());
         return userDao.update(userInfo);
     }
 
     // 根据用户名 精确查询
     public UserInfo findByName(String username) {
         return userDao.findByUsername(username);
+    }
+
+    // 根据username 获取userId
+    public Integer selectId() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername(UserInfoUtils.getUserName());
+        // 判断用户名是否存在
+        if (userInfo.getUsername() == null) {
+            // 不存在
+            return 0;
+        } else {
+            // 存在 查询id 返回id
+            return userDao.selectId(userInfo);
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.leng.news.controller;
 import com.github.pagehelper.PageInfo;
 import com.leng.news.domain.Activity;
 import com.leng.news.service.IActivityService;
+import com.leng.news.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,9 @@ public class ActivityController {
     @Autowired
     private IActivityService activityService;
 
+    @Autowired
+    private IUserService userService;
+
     @RequestMapping("selectByName.do")
     public Map<String, Object> selectByName(Activity activity, int page, int limit) {
         PageInfo<Activity> info = activityService.selectByName(activity, page, limit);
@@ -30,6 +34,7 @@ public class ActivityController {
 
     @RequestMapping("insert.do")
     public int insert(Activity activity) {
+        activity.setUserId(userService.selectId());
         return activityService.insert(activity);
     }
 

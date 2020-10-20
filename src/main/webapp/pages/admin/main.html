@@ -35,7 +35,7 @@
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="">退了</a></li>
+            <li class="layui-nav-item"><a href="http://localhost:8888/bysj01/logout.do">退了</a></li>
         </ul>
     </div>
 
@@ -61,26 +61,25 @@
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:op('../admin/news_list.html');">文章列表</a></dd>
                         <dd><a href="javascript:op('../admin/news_review.html');">文章审核</a></dd>
-                        <!-- <dd><a href="javascript:op('type_list.html');">文章类型</a></dd> -->
+                        <dd><a href="javascript:op('type_list.html');">文章类型</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:">我的文章</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:op('../newsUser/news_add.html');">添加文章</a></dd>
-                        <dd><a href="javascript:op('../newsUser/MyNews_list.html');">我的文章</a></dd>
-                        <!-- <dd><a href="javascript:;">评论管理</a> </dd> -->
+                        <dd><a href="javascript:op('../newsUser/myNews_list.html');">已通过文章</a></dd>
+                        <dd><a href="javascript:op('../newsUser/not_pass.html');">未通过文章</a></dd>
+                        <dd><a href="javascript:op('../newsUser/reviewing.html');">待审核文章</a></dd>
+                        <dd><a href="javascript:op('../newsUser/news_draft.html');">草稿箱</a></dd>
                     </dl>
                 </li>
-                <!-- <li class="layui-nav-item">
-                  <a href="javascript:;">通知公告</a>
-                  <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">添加通知</a></dd>
-                     <dd><a href="javascript:;">通知列表</a> </dd>
-                  </dl>
-                </li> -->
                 <li class="layui-nav-item">
-                    <a href="javascript:op('../newsUser/news_draft.html');">草稿箱</a>
+                    <a href="javascript:">公告/活动</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:op('../admin/notice_list.html');">通知列表</a></dd>
+                        <dd><a href="javascript:op('../admin/activity_list.html');">活动列表</a></dd>
+                    </dl>
                 </li>
 
             </ul>

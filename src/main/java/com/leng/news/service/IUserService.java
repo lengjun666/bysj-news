@@ -19,5 +19,8 @@ public interface IUserService extends UserDetailsService {
 
     int update(UserInfo userInfo);
 
-    UserInfo selectById(UserInfo userInfo);
+    UserInfo selectById();
+
+    Integer selectId();
+
 }

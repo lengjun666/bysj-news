@@ -15,7 +15,7 @@ public interface IActivityDao {
     List<Activity> selectByName(Activity activity);
 
     // 添加 活动
-    @Insert("insert into activity (title,activity,addtime,endtime) values (#{title},#{activity},#{addTime},#{endTime})")
+    @Insert("insert into activity (userid,title,activity,addtime,endtime) values (#{userId},#{title},#{activity},#{addTime},#{endTime})")
     int insert(Activity activity);
 
     // 删除 活动

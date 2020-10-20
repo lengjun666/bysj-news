@@ -3,6 +3,7 @@ package com.leng.news.controller;
 import com.github.pagehelper.PageInfo;
 import com.leng.news.domain.News;
 import com.leng.news.service.INewsService;
+import com.leng.news.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,9 @@ public class NewsController {
 
     @Autowired
     private INewsService newsService;
+
+    @Autowired
+    private IUserService userService;
 
     @RequestMapping("selectByTitleAndStatus.do")
     public Map<String, Object> selectByTitleAndStatus(News news, int page, int limit) {
@@ -50,6 +54,7 @@ public class NewsController {
 
     @RequestMapping("selectByTitleAndUserId.do")
     public Map<String, Object> selectByTitleAndUserId(News news, int page, int limit) {
+        news.setUserId(userService.selectId());
         PageInfo<News> info = newsService.selectByTitleAndUserId(news, page, limit);
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("data", info.getList());
@@ -76,6 +81,7 @@ public class NewsController {
 
     @RequestMapping("insertStatus.do")
     public int insertStatus(News news) {
+        news.setUserId(userService.selectId());
         return newsService.insertStatus(news);
     }
 

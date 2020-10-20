@@ -114,3 +114,14 @@ h1, h2, h3, h4, h5, h6 {
 .blog-footer p:last-child {
     margin-bottom: 0;
 }
+
+.top-user-img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%
+}
+
+.avater:hover {
+    cursor: pointer;
+}

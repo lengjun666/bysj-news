@@ -17,6 +17,20 @@
 
                     <div class="layui-form" lay-filter="formA">
                         <div class="layui-form-item">
+                            <label class="layui-form-label" style="line-height: 52px">头像</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-upload">
+                                    <div class="layui-upload-list" style="display: inline-block;margin-right: 30px">
+                                        <img class="layui-upload-img" id="avatar"
+                                             style="width: 50px;height: 50px;border-radius: 50%;border:1px solid #c3c5c9;">
+                                    </div>
+                                    <div style="display: inline-block">
+                                        <button class="layui-btn" id="test1" type="button">修改头像</button>
+                                    </div>
+                                    <p id="demoText" style="display: inline-block"></p></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
                             <label class="layui-form-label">我的角色</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="" name="roleId">
@@ -30,18 +44,13 @@
                                 当前角色不可更改为其它角色
                             </div>
                         </div>
-
-
                         <div class="layui-form-item">
                             <label class="layui-form-label">用户名</label>
                             <div class="layui-input-inline">
-                                <input name="id" type="hidden">
                                 <input class="layui-input" name="username" readonly type="text" value="xianxin">
                             </div>
                             <div class="layui-form-mid layui-word-aux">不可修改。登入名</div>
                         </div>
-
-
                         <div class="layui-form-item">
                             <label class="layui-form-label">昵称</label>
                             <div class="layui-input-inline">
@@ -50,7 +59,6 @@
                                        value="贤心">
                             </div>
                         </div>
-
                         <div class="layui-form-item">
                             <label class="layui-form-label">性别</label>
                             <div class="layui-input-block">
@@ -87,18 +95,22 @@
 </body>
 
 <script>
+    let $ = layui.jquery;
+    let form = layui.form;
+    let layer = layui.layer;
+    let upload = layui.upload;
+    let userId;
 
     function load() {
         // 数据显示
-        var $ = layui.jquery;
-        var form = layui.form;
         $.ajax({
             url: "http://localhost:8888/bysj01/user/selectById.do",
-            data: "id=" + 1,
             dataType: "json",
             type: "post",
             success: function (d) {
-                var select = "#option" + d.roleId
+                console.log(d);
+                let select = "#option" + d.roleId;
+                $("#avatar").attr("src", d.img);
                 if (d.roleId == 1 || d.roleId == 2) {
                     $(select).siblings().attr("disabled", "disabled");
                     $("#roleDesc").css("display", "block");
@@ -112,40 +124,60 @@
                     phone: d.phone,
                     sex: d.sex,
                     roleId: d.roleId,
-                    id: d.id
                 });
+                userId = d.id;
             }
         });
     }
 
     load();
-    //Demo
-    layui.use('form', function () {
-        var form = layui.form;
-        var $ = layui.jquery;
-        var layer = layui.layer;
-        //监听提交
-        form.on('submit(formDemo)', function (data) {
-            $.ajax({
-                url: "http://localhost:8888/bysj01/user/update.do",
-                data: data.field,
-                dataType: "json",
-                type: "post",
-                success: function (d) {
-                    if (d == 1) {
-                        layer.msg("保存成功", {time: 2000, shade: 0.4}, function () {
-                            layer.msg("刷新", {time: 1000}, function () {
-                                load();
-                            })
-                        });
-
-                    } else {
-                        layer.msg("保存失败，请重试");
-                    }
+    //监听提交
+    form.on('submit(formDemo)', function (data) {
+        $.ajax({
+            url: "http://localhost:8888/bysj01/user/update.do",
+            data: data.field,
+            dataType: "json",
+            type: "post",
+            success: function (d) {
+                if (d == 1) {
+                    layer.msg("保存成功", {time: 2000, shade: 0.4}, function () {
+                        layer.msg("刷新", {time: 1000}, function () {
+                            load();
+                        })
+                    });
+                } else {
+                    layer.msg("保存失败，请重试");
                 }
-            })
-            return false;
-        });
+            }
+        })
+        return false;
+    });
+    let uploadInst = upload.render({
+        elem: '#test1'
+        , data: {}
+        , url: 'http://localhost:8888/bysj01/img/userImg.do' //改成您自己的上传接口
+        , before: function (obj) {
+            this.data.id = userId;
+            //预读本地文件示例，不支持ie8
+            obj.preview(function (index, file, result) {
+                $('#avatar').attr('src', result); //图片链接（base64）
+            });
+        }
+        , done: function (res) {
+            //如果上传失败
+            if (res.code > 0) {
+                return layer.msg('上传失败');
+            }
+            //上传成功
+        }
+        , error: function () {
+            //演示失败状态，并实现重传
+            var demoText = $('#demoText');
+            demoText.html('<span style="color: #ff5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+            demoText.find('.demo-reload').on('click', function () {
+                uploadInst.upload();
+            });
+        }
     });
 </script>
 </body>

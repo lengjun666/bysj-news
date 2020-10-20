@@ -68,8 +68,13 @@ public interface IUserDao {
 
     // 根据id 查询用户详情
     @Select("select * from user where id = #{id}")
-    UserInfo selectById(UserInfo userInfo);
+    UserInfo selectById(Integer id);
 
+    // 根据 id 获取 昵称
     @Select("select nickname from user where id = #{id}")
     String selectNickNameById(Integer id);
+
+    // 根据username 获取userid
+    @Select("select id from user where username = #{username}")
+    Integer selectId(UserInfo userInfo);
 }

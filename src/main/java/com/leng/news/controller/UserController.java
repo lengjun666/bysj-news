@@ -54,8 +54,8 @@ public class UserController {
     }
 
     @RequestMapping("selectById.do")
-    public UserInfo selectById(UserInfo userInfo) {
-        return userService.selectById(userInfo);
+    public UserInfo selectById() {
+        return userService.selectById();
     }
 
     @RequestMapping("update.do")
@@ -64,3 +64,4 @@ public class UserController {
     }
 
 }
+

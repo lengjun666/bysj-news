@@ -104,7 +104,8 @@
 											  rows="4"
 											  style="border-left: none;border-top: none;border-right: none;"></textarea>
 								</div>
-								<button class="btn btn-primary" lay-filter="formDemo" lay-submit type="button">发表评论
+								<button class="btn btn-primary" lay-filter="formDemo" lay-submit type="button"
+										v-on:click="commentClick()">发表评论
 								</button>
 							</form>
 						</div>
@@ -176,7 +177,6 @@
 				data: {id: id}
 				//    配置参数
 			}).done(function (res) {
-				console.log(res);
 				that.news = res;
 				//    以此类推
 			}).fail(function () {
@@ -229,7 +229,6 @@
 				dataType: "json",
 				//    配置参数
 			}).done(function (res) {
-				console.log(res.data);
 				if (res.data.length != 0) {
 					that.comment = res.data;
 				} else {
@@ -264,7 +263,6 @@
 				});
 			},
 			newsClick: function (id) {
-				console.log(id);
 				$.ajax({
 					url: 'http://localhost:8888/bysj01/news/updateClick.do',
 					type: "post",
@@ -284,7 +282,6 @@
 					dataType: "json",
 					//    配置参数
 				}).done(function (res) {
-					console.log(res);
 					vm.news = res.data;
 					//    以此类推
 				}).fail(function () {
@@ -303,34 +300,56 @@
 						iframe.child(id);
 					}
 				});
+			},
+			commentClick: function () {
+				let form = layui.form;
+				let layer = layui.layer;
+				form.on('submit(formDemo)', function (data) {
+					$.ajax({
+						url: "http://localhost:8888/bysj01/user/selectById.do",
+						dataType: "json",
+						type: "post"
+					}).done(function (res) {
+						$.ajax({
+							url: "http://localhost:8888/bysj01/comment/insert.do",// 添加评论
+							data: {
+								newsId: get("id"),
+								comment: data.field.comment
+							},
+							dataType: "json",
+							type: "post",
+							success: function (d) {
+								if (d == 1) {
+									layer.msg("添加成功", {time: 1000}, function () {
+										$.ajax({
+											url: 'http://localhost:8888/bysj01/comment/selectByNewsId.do',
+											type: "post",
+											data: {page: 1, limit: 10, newsId: get("id")},
+											dataType: "json",
+											//    配置参数
+										}).done(function (res) {
+											if (res.data.length != 0) {
+												vm.comment = res.data;
+											} else {
+												vm.show = true;
+											}
+										}).fail(function () {
+											console.log("请求失败");
+										});
+									});
+								} else if (d == 2) {
+									layer.msg("添加失败，请重试");
+								}
+							}
+						});
+						//    以此类推
+					}).fail(function () {
+						layer.msg("提交失败，请登陆后重试");
+					});
+					return false;
+				});
 			}
 		}
-	});
-
-	let form = layui.form;
-	let layer = layui.layer;
-	form.on('submit(formDemo)', function (data) {
-		console.log(data);
-		$.ajax({
-			url: "http://localhost:8888/bysj01/comment/insert.do",// 提交 状态设置为待审核
-			data: {
-				newsId: get("id"),
-				userId: 1,
-				comment: data.field.comment
-			},
-			dataType: "json",
-			type: "post",
-			success: function (d) {
-				if (d == 1) {
-					layer.msg("添加成功", {time: 1000}, function () {
-						location.reload();
-					});
-				} else if (d == 2) {
-					layer.msg("添加失败，请重试");
-				}
-			}
-		});
-		return false;
 	});
 </script>
 </body>

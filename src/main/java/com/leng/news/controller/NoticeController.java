@@ -3,6 +3,7 @@ package com.leng.news.controller;
 import com.github.pagehelper.PageInfo;
 import com.leng.news.domain.Notice;
 import com.leng.news.service.INoticeService;
+import com.leng.news.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,9 @@ public class NoticeController {
     @Autowired
     private INoticeService noticeService;
 
+    @Autowired
+    private IUserService userService;
+
     @RequestMapping("selectAll.do")
     public Map<String, Object> selectAll(Notice notice, int page, int limit) {
         PageInfo<Notice> info = noticeService.selectAll(notice, page, limit);
@@ -29,6 +33,7 @@ public class NoticeController {
 
     @RequestMapping("insert.do")
     public int insert(Notice notice) {
+        notice.setUserId(userService.selectId());
         return noticeService.insert(notice);
     }
 

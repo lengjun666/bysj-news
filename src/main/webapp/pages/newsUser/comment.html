@@ -36,7 +36,7 @@
                         title: '评论',
                         align: 'center'
                     }, {
-                    field: 'updatetimeStr',
+                    field: 'addTimeStr',
                     title: '评论时间',
                     align: 'center',
                     width: 200,
@@ -67,7 +67,10 @@
         });
 
         function refresh() {
-            $("button[lay-event='sel']").click(); //触发了鼠标点击的事件
+            table.reload('demo', {
+                page: {curr: 1} //重新从第 1 页开始
+                , method: "post"
+            });
         }
 
         table.on('tool(test)', function (obj) {
@@ -78,8 +81,8 @@
                 case "del":
                     layer.confirm("确定是否删除", function (index) {
                         $.ajax({
-                            url: "127.0.0.1:/news/delete.do",
-                            data: "code=" + code,
+                            url: "http://localhost:8888/bysj01/comment/delete.do",
+                            data: "id=" + code,
                             dataType: "json",
                             type: "post",
                             success: function (d) {

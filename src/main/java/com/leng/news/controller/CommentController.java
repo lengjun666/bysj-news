@@ -3,6 +3,7 @@ package com.leng.news.controller;
 import com.github.pagehelper.PageInfo;
 import com.leng.news.domain.Comment;
 import com.leng.news.service.ICommentService;
+import com.leng.news.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,9 @@ public class CommentController {
     @Autowired
     private ICommentService commentService;
 
+    @Autowired
+    private IUserService userService;
+
     @RequestMapping("selectByNewsId.do")
     public Map<String, Object> selectByName(Comment comment, int page, int limit) {
         PageInfo<Comment> info = commentService.selectByNewsId(comment, page, limit);
@@ -29,6 +33,7 @@ public class CommentController {
 
     @RequestMapping("insert.do")
     public int insert(Comment comment) {
+        comment.setUserId(userService.selectId());
         return commentService.insert(comment);
     }
 

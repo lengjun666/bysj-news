@@ -27,8 +27,8 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:">
-                    <img class="layui-nav-img" src="http://t.cn/RCzsdCq">
-                    贤心
+                    <img class="layui-nav-img" id="avatar" src="http://t.cn/RCzsdCq">
+                    <span id="nickName"></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
@@ -114,6 +114,21 @@
     }
 </script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $.ajax({
+        url: 'http://localhost:8888/bysj01/user/selectById.do',
+        type: "post",
+        dataType: "json",
+        //    配置参数
+    }).done(function (res) {
+        console.log(res);
+        $("#avatar").attr("src", res.img);
+        $("#nickName").text(res.nickName);
+        //    以此类推
+    }).fail(function () {
+        console.log("请求失败");
+    });
+</script>
 <!-- <script src="js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script> -->
 <!-- <script src="new_file.js" type="text/javascript" charset="utf-8"></script> -->
 </body>

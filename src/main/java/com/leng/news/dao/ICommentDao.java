@@ -18,6 +18,6 @@ public interface ICommentDao {
     int insert(Comment comment);
 
     // 根据id 删除评论
-    @Delete("delete comment where id = #{id}")
+    @Delete("delete from comment where id = #{id}")
     int delete(Comment comment);
 }
