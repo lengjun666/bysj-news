@@ -1,7 +1,8 @@
 <html>
 <head>
     <title>Title</title>
-    <link href="../../layui/css/layui.css" rel="stylesheet">
+    <link href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css" rel="stylesheet">
+    <script src="http://localhost:8888/bysj01/layui/layui.all.js"></script>
 </head>
 <body>
 <form action="" class="layui-form" lay-filter="formA" method="post" style="margin: 20px auto;">
@@ -50,46 +51,12 @@
         </div>
     </div>
 </form>
-<script src="../../layui/layui.all.js"></script>
 <script>
-    layui.use('upload', function () {
-        var $ = layui.jquery
-            , upload = layui.upload;
-
-        //普通图片上传
-        var uploadInst = upload.render({
-            elem: '#test1'
-            , url: 'https://httpbin.org/post' //改成您自己的上传接口
-            , before: function (obj) {
-                //预读本地文件示例，不支持ie8
-                obj.preview(function (index, file, result) {
-                    $('#demo1').attr('src', result); //图片链接（base64）
-                });
-            }
-            , done: function (res) {
-                //如果上传失败
-                if (res.code > 0) {
-                    return layer.msg('上传失败');
-                }
-                //上传成功
-            }
-            , error: function () {
-                //演示失败状态，并实现重传
-                var demoText = $('#demoText');
-                demoText.html('<span style="color: #ff5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                demoText.find('.demo-reload').on('click', function () {
-                    uploadInst.upload();
-                });
-            }
-        });
-    });
-</script>
-<script>
-    var index = parent.layer.getFrameIndex(window.name);
-    var $ = layui.jquery;
-    var form = layui.form;
-    var layer = layui.layer;
-    var layedit = layui.layedit;
+    let index = parent.layer.getFrameIndex(window.name);
+    let $ = layui.jquery;
+    let form = layui.form;
+    let layer = layui.layer;
+    let layedit = layui.layedit;
 
     function child(obj) {
         $.ajax({
@@ -114,8 +81,14 @@
                     title: d.title,
                     typeId: d.typeId
                 });
-                var index = layedit.build('content'); //建立编辑器
-                var introduction = layedit.build('introduction', {
+                layedit.set({
+                    uploadImage: {
+                        url: 'http://localhost:8888/bysj01/img/layeditImg.do' //接口url
+                        , type: 'post' //默认post
+                    }
+                });
+                let index = layedit.build('content'); //建立编辑器
+                let introduction = layedit.build('introduction', {
                     height: 100,
                     tool: [
                         'strong' //加粗

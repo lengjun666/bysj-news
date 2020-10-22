@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>文章列表</title>
-    <link href="../../layui/css/layui.css" media='all' rel="stylesheet">
-    <script src="../../layui/layui.all.js" type="text/javascript"></script>
+    <link href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.6/layui.all.min.js"></script>
 </head>
 <body>
 
@@ -25,9 +25,9 @@
     <button class="layui-btn layui-btn-sm" lay-event="sel">查询</button>
 </script>
 <script>
-    var table = layui.table;
-    var $ = layui.jquery;
-    var layer = layui.layer;
+    let table = layui.table;
+    let $ = layui.jquery;
+    let layer = layui.layer;
     table.render({
         elem: '#demo',
         url: 'http://localhost:8888/bysj01/news/selectByTitleAndUserId.do',// 从后台获取数据 状态为通过
@@ -96,9 +96,9 @@
     }
 
     table.on('tool(test)', function (obj) {
-        var event = obj.event;
-        var data = obj.data;
-        var code = data.id;
+        let event = obj.event;
+        let data = obj.data;
+        let code = data.id;
         switch (event) {
             case "del":
                 layer.confirm("确定是否删除", function (index) {
@@ -137,14 +137,14 @@
                 });
                 break;
             case "show":
-                var test = layer.open({
+                let test = layer.open({
                     type: 2,
                     area: ['600px', '450px'],
                     maxmin: true,
                     end: refresh,
                     content: 'http://localhost:8888/bysj01/pages/newsUser/news_show.html',
                     success: function (layero, index) {
-                        var iframe = window['layui-layer-iframe' + index];
+                        let iframe = window['layui-layer-iframe' + index];
                         iframe.child(code);
                     }
                 });

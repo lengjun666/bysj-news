@@ -1,7 +1,8 @@
 <html>
 <head>
     <title>Title</title>
-    <link href="../../layui/css/layui.css" rel="stylesheet">
+    <link href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.6/layui.all.min.js"></script>
 </head>
 <body>
 <form action="" class="layui-form" method="post" style="margin: 20px auto;">
@@ -19,23 +20,20 @@
         </div>
     </div>
 </form>
-<script src="../../layui/layui.js"></script>
 <script>
-    //Demo
-    layui.use('form', function () {
-        var form = layui.form;
-        var $ = layui.jquery;
-        var layer = layui.layer;
-        //监听提交
-        form.on('submit(formDemo)', function (data) {
-            $.ajax({
-                url: "http://localhost:8888/bysj01/type/insert.do",
-                data: data.field,
-                dataType: "json",
-                type: "post",
-                success: function (d) {
-                    console.log(d);
-                    if (d == 1) {
+    let form = layui.form;
+    let $ = layui.jquery;
+    let layer = layui.layer;
+    //监听提交
+    form.on('submit(formDemo)', function (data) {
+        $.ajax({
+            url: "http://localhost:8888/bysj01/type/insert.do",
+            data: data.field,
+            dataType: "json",
+            type: "post",
+            success: function (d) {
+                console.log(d);
+                if (d == 1) {
                         layer.msg("添加成功");
                     } else {
                         layer.msg("添加失败，请重试");
@@ -44,7 +42,6 @@
             });
             return false;
         });
-    });
 </script>
 </body>
 </html>

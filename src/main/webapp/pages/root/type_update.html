@@ -2,7 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="../../layui/css/layui.css" rel="stylesheet">
+    <link href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.6/layui.all.min.js"></script>
 </head>
 <body>
 <form action="" class="layui-form" lay-filter="formA" method="post" style="margin: 20px auto;">
@@ -20,12 +21,11 @@
         </div>
     </div>
 </form>
-<script src="../../layui/layui.all.js"></script>
 <script>
-    var index = parent.layer.getFrameIndex(window.name);
-    var $ = layui.jquery;
-    var form = layui.form;
-    var layer = layui.layer;
+    let index = parent.layer.getFrameIndex(window.name);
+    let $ = layui.jquery;
+    let form = layui.form;
+    let layer = layui.layer;
 
     function child(obj) {
         $.ajax({

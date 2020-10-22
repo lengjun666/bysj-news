@@ -33,8 +33,6 @@
     </bean>
     <!-- 设置静态资源不过滤 -->
     <mvc:resources location="/css/" mapping="/css/**"/>
-    <mvc:resources location="/img/" mapping="/img/**"/>
-    <mvc:resources location="/js/" mapping="/js/**"/>
     <mvc:resources location="/layui/" mapping="/plugins/**"/>
 
     <!-- 开启对SpringMVC注解的支持 -->

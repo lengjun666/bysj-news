@@ -102,7 +102,6 @@ public class NewsServiceImpl implements INewsService {
     // 设置文章 时间和状态
     public List<News> setTimeAndSetStatus(List<News> newsList) {
         for (News news1 : newsList) {
-            System.out.println(news1);
             if (news1.getAddTime() != null) {
                 news1.setAddTimeStr(DateUtils.date2String(news1.getAddTime(), "yyyy-MM-dd HH:mm:ss"));
             }

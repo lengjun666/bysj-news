@@ -1,7 +1,8 @@
 <html>
 <head>
     <title>Title</title>
-    <link href="../../layui/css/layui.css" rel="stylesheet">
+    <link href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.6/layui.all.min.js"></script>
 </head>
 <body>
 <form action="" class="layui-form" method="post" style="margin: 20px;">
@@ -19,26 +20,23 @@
         </div>
     </div>
 </form>
-<script src="../../layui/layui.js"></script>
 <script>
+    let form = layui.form;
+    let $ = layui.jquery;
+    let layer = layui.layer;
+    let layedit = layui.layedit;
+    // 建立编辑器
+    let index = layedit.build('content', {
+        tool: [
+            'strong' //加粗
+            , 'italic' //斜体
+            , 'underline' //下划线
+            , 'del' //删除线
 
-    layui.use(['form', 'layedit', 'laydate'], function () {
-        var form = layui.form;
-        var $ = layui.jquery;
-        var layer = layui.layer;
-        var layedit = layui.layedit;
-        // 建立编辑器
-        var index = layedit.build('content', {
-            tool: [
-                'strong' //加粗
-                , 'italic' //斜体
-                , 'underline' //下划线
-                , 'del' //删除线
+            , '|' //分割线
 
-                , '|' //分割线
-
-                , 'left' //左对齐
-                , 'center' //居中对齐
+            , 'left' //左对齐
+            , 'center' //居中对齐
                 , 'right' //右对齐
                 , 'face' //表情
             ]
@@ -66,7 +64,6 @@
             });
             return false;
         });
-    });
 </script>
 </body>
 </html>

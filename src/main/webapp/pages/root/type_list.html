@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>文章列表</title>
-    <link href="../../layui/css/layui.css" media='all' rel="stylesheet">
-    <script src="../../layui/layui.all.js" type="text/javascript"></script>
+    <link href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.6/layui.all.min.js"></script>
 </head>
 <body>
 
@@ -26,9 +26,9 @@
     <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
 </script>
 <script>
-    var table = layui.table;
-    var $ = layui.jquery;
-    var layer = layui.layer;
+    let table = layui.table;
+    let $ = layui.jquery;
+    let layer = layui.layer;
     table.render({
         elem: '#demo',
         url: 'http://localhost:8888/bysj01/type/selectByName.do',// 从后台获取数据
@@ -115,7 +115,7 @@
                     end: refresh,
                     content: 'http://localhost:8888/bysj01/pages/root/type_update.html',
                     success: function (layero, index) {
-                        var iframe = window['layui-layer-iframe' + index];
+                        let iframe = window['layui-layer-iframe' + index];
                         iframe.child(code);
                     }
                 });
