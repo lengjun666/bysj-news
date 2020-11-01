@@ -46,11 +46,11 @@
 
 #### 说明
 
-1. MySQL数据库，见项目根目录 bysj03.sql,需手动导入，仅结构，数据需手动导入，密码使用bCryptPasswordEncoder加密，
+1. MySQL数据库，见项目根目录 bysj03.sql,需手动导入，仅结构，数据需手动添加，密码使用bCryptPasswordEncoder加密，
 2. IDEA tomcat插件端口为 8888
 3. nginx  的端口为 8010  ，图片相关功能，使用nginx映射本地文件，可自行修改，如修改，需同步修改 ImgServiceImpl 类中的src 路径
 4. 数据库配置文件，见db.properties ，user表的img字段为头像，有默认值
-
+5. 后台页面 系统管理员 用户名 root 密码 root
 #### 部分预览图
 
 首页（新闻页）
@@ -72,3 +72,4 @@
 管理后台，添加文章
 
 ![](https://raw.githubusercontent.com/lengjun666/Img/master/imgimage-20201022104348168.png)
+

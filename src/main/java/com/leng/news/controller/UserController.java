@@ -29,7 +29,6 @@ public class UserController {
 
     @RequestMapping("insert.do")
     public int insert(UserInfo userInfo) {
-        System.out.println(userInfo);
         return userService.insert(userInfo);
     }
 

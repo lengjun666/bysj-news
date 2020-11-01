@@ -5,7 +5,6 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
     <title>添加管理员</title>
     <link href="https://www.layuicdn.com/layui-v2.5.6/css/layui.css" rel="stylesheet">
-    <script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.6/layui.all.min.js"></script>
 </head>
 <body>
 <div class="layui-fluid">
@@ -15,19 +14,19 @@
                 <div class="layui-card-header">添加审核员</div>
                 <div class="layui-card-body" pad15>
 
-                    <div class="layui-form" lay-filter="">
+                    <div class="layui-form">
                         <div class="layui-form-item">
                             <label class="layui-form-label">角色</label>
-                            <div class="layui-input-inline">
-                                <select lay-verify="" name="roleId">
-                                    <option selected value="2">审核员</option>
+                            <div class="layui-input-inline" style="height: 38px">
+                                <select name="roleId">
+                                    <option selected="selected" value="2">审核员</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">用户名</label>
                             <div class="layui-input-inline">
-                                <input class="layui-input" name="username" type="text">
+                                <input class="layui-input" lay-verify="required" name="username" type="text">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -59,6 +58,7 @@
     </div>
 </div>
 </body>
+<script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.6/layui.all.min.js"></script>
 <script>
     let $ = layui.jquery;
     let form = layui.form;
@@ -72,8 +72,11 @@
             type: "post",
             success: function (d) {
                 if (d == 1) {
-                    layer.msg("保存成功");
-                    } else if (d == 2) {
+                    layer.msg("添加成功", {time: 2000, shade: 0.4}, function () {
+                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index);
+                    });
+                } else if (d == 2) {
                         layer.msg("用户名重复");
                     } else {
                         layer.msg("添加失败，请重试");

@@ -120,9 +120,9 @@
 						<div class="card-body">
 							<h5 class="card-title">评论</h5>
 							<ul class="list-group list-group-flush">
-								<li class="list-group-item" v-for="item in comment" v-html="item.comment"></li>
-								<li class="list-group-item" v-else v-if="commentShow">暂时没有评论，抢个沙发</li>
-							</ul>
+                                <li class="list-group-item" v-for="item in comment" v-html="item.comment"></li>
+                                <li class="list-group-item" v-if="commentShow">暂时没有评论，抢个沙发</li>
+                            </ul>
 						</div>
 					</div>
 

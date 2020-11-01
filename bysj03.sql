@@ -49,18 +49,6 @@ CREATE TABLE `comment`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for img
--- ----------------------------
-DROP TABLE IF EXISTS `img`;
-CREATE TABLE `img`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，无意义',
-  `newsid` int(11) NULL DEFAULT NULL COMMENT '外键，文章id',
-  `src` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '图片路径',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `newsid`(`newsid`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- Table structure for news
 -- ----------------------------
 DROP TABLE IF EXISTS `news`;
@@ -134,4 +122,10 @@ CREATE TABLE `user`  (
   INDEX `roleid`(`roleid`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+INSERT INTO `role` VALUES (1, 'ROOT', '超级管理员');
+INSERT INTO `role` VALUES (2, 'ADMIN', '文章审核员');
+INSERT INTO `role` VALUES (3, 'NEWSUSER', '新闻工作者');
+INSERT INTO `role` VALUES (4, 'USER', '普通用户');
+
+INSERT INTO `user` (username,password,roleid) VALUES ('root', '$2a$10$RMcxK2B6Xz/kxglCH/kGcO57XatAmKeg4DF0/ftyKWafl5t6Z95fS', 1);
 SET FOREIGN_KEY_CHECKS = 1;
